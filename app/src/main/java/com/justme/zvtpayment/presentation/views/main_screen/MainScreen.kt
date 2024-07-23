@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.justme.zvtpayment.presentation.components.CircleButton
 import com.justme.zvtpayment.presentation.components.NumpadText
+import com.justme.zvtpayment.presentation.components.PaymentButton
 
 @Composable
 fun MainScreen() {
@@ -57,12 +58,31 @@ fun MainScreen() {
                             horizontalArrangement = Arrangement.Center
                         ) {
                             CircleButton(number = (it + 1).toString()) {
-                                numpadValue.value += it
+                                when (it) {
+                                    "12" -> {
+                                        if (numpadValue.value.isNotEmpty()) {
+                                            numpadValue.value = numpadValue.value.dropLast(1)
+                                        }
+                                    }
+
+                                    "10" -> {
+                                        if (numpadValue.value.contains(".")) {
+                                            return@CircleButton
+                                        }
+                                        numpadValue.value += "."
+                                    }
+
+                                    else -> {
+                                        numpadValue.value += it
+                                    }
+                                }
+
                             }
 
                         }
                     }
                 }
+                PaymentButton("Payment")
 
             }
         }
